@@ -12,3 +12,7 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('contact');
 });
+
+Route::get('/jobs', function () {
+    return view('jobs');
+});
