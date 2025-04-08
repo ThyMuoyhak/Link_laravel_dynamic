@@ -6,6 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $title }}</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+      <!-- Add AOS CSS -->
+      <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+      <!-- Google Fonts: Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-900 text-white">
 
@@ -23,6 +27,7 @@
                 <x-nav-link href="/about">About</x-nav-link>
                 <x-nav-link href="/contact">Contact</x-nav-link>
                 <x-nav-link href="/jobs">Jobs List</x-nav-link>
+                <x-nav-link href="/employees">Employee list</x-nav-link>
               </div>
             </div>
           </div>
@@ -60,6 +65,14 @@
       </div>
     </main>
   </div>
-
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+      AOS.init({
+          duration: 1000, // Animation duration
+          easing: 'ease-in-out', // Easing function
+          once: true, // Animation happens only once
+      });
+  </script>
+  
 </body>
 </html>
