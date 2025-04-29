@@ -28,6 +28,7 @@
                 <x-nav-link href="/contact">Contact</x-nav-link>
                 <x-nav-link href="/jobs">Jobs List</x-nav-link>
                 <x-nav-link href="/employees">Employee list</x-nav-link>
+                <x-nav-link href="/employees">Student list</x-nav-link>
               </div>
             </div>
           </div>
