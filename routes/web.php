@@ -18,9 +18,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Students Routes
-Route::resource('students', StudentController::class)->except(['destroy']); // Exclude destroy to avoid conflict
-Route::delete('students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
 
 // Basic Pages
 Route::view('/', 'home')->name('home');
@@ -40,3 +37,7 @@ Route::get('/employees/no/{no}', function ($no) {
     $employee = Employee::where('no', $no)->first() ?? abort(404); // Use Eloquent query
     return view('employees.show', compact('employee'));
 })->name('employee.show');
+
+// Students Routes
+Route::resource('students', StudentController::class)->except(['destroy']); // Exclude destroy to avoid conflict
+Route::delete('students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
