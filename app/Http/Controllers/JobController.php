@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
@@ -12,7 +13,7 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Job::all();
+        $jobs = Job::with('user')->get(); // Eager load the user relationship for displaying user name
         return view('jobs.index', compact('jobs'));
     }
 
@@ -34,9 +35,11 @@ class JobController extends Controller
             'salary' => 'required|string|max:255',
         ]);
 
-        Job::create($request->all());
+        Job::create(array_merge($request->all(), [
+            'id_user' => Auth::id(), // Associate the logged-in user's ID
+        ]));
 
-        return redirect()->route('jobs.index')->with('success', 'Job created successfully.');
+        return redirect()->route('jobs.index')->with('success', 'ការងារត្រូវបានបង្កើតដោយជោគជ័យ។');
     }
 
     /**
@@ -52,6 +55,11 @@ class JobController extends Controller
      */
     public function edit(Job $job)
     {
+        // Check if the logged-in user is the creator of the job
+        if ($job->id_user !== Auth::id()) {
+            return redirect()->route('jobs.index')->with('error', 'អ្នកមិនមានសិទ្ធិកែសម្រួលការងារនេះទេ។');
+        }
+
         return view('jobs.edit', compact('job'));
     }
 
@@ -60,14 +68,19 @@ class JobController extends Controller
      */
     public function update(Request $request, Job $job)
     {
+        // Check if the logged-in user is the creator of the job
+        if ($job->id_user !== Auth::id()) {
+            return redirect()->route('jobs.index')->with('error', 'អ្នកមិនមានសិទ្ធិកែសម្រួលការងារនេះទេ។');
+        }
+
         $request->validate([
             'position' => 'required|string|max:255',
             'salary' => 'required|string|max:255',
         ]);
 
-        $job->update($request->all());
+        $job->update($request->only(['position', 'salary'])); // Update only position and salary, preserve original id_user
 
-        return redirect()->route('jobs.index')->with('success', 'Job updated successfully.');
+        return redirect()->route('jobs.index')->with('success', 'ការងារត្រូវបានធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យ។');
     }
 
     /**
@@ -75,8 +88,13 @@ class JobController extends Controller
      */
     public function destroy(Job $job)
     {
+        // Check if the logged-in user is the creator of the job
+        if ($job->id_user !== Auth::id()) {
+            return redirect()->route('jobs.index')->with('error', 'អ្នកមិនមានសិទ្ធិលុបការងារនេះទេ។');
+        }
+
         $job->delete();
 
-        return redirect()->route('jobs.index')->with('success', 'Job deleted successfully.');
+        return redirect()->route('jobs.index')->with('success', 'ការងារត្រូវបានលុបដោយជោគជ័យ។');
     }
 }

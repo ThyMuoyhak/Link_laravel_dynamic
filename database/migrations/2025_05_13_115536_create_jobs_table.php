@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         if (!Schema::hasTable('jobs')) {
@@ -16,14 +13,14 @@ return new class extends Migration
                 $table->id();
                 $table->string('position');
                 $table->string('salary');
+                // Add id_user column as a foreign key referencing data_users
+                $table->unsignedBigInteger('id_user');
+                $table->foreign('id_user')->references('id')->on('data_users')->onDelete('cascade');
                 $table->timestamps();
             });
         }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('jobs');
